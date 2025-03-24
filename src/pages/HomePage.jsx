@@ -39,7 +39,6 @@ const HomePage = () => {
    marginBottom: "20px", 
     fontSize: "20px", 
     fontWeight: "bold", 
-    // textAlign: "center", 
     display: "block", 
 }}>
     🔍 Fast Detection. Better Protection.

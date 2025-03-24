@@ -2,13 +2,14 @@
   display: flex;
   flex-direction: column;
   padding: 40px 20px;
+  max-height: 100%;
 }
 
 .card {
   display: flex;
   margin: 0 auto;
   width: 90%;
-  max-width: 1200px;
+  width: 100%;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
@@ -210,3 +211,9 @@
   color: var(--medium-gray);
 }
 
+
+@media (min-width: 750px) and (max-width: 1000px) {
+  .input-container{
+    min-height: 70vh;
+  }
+}

@@ -1,31 +1,46 @@
 .Notice {
-    width: 100%;
-    overflow: hidden;
-    background-color: #ffdd55; /* Yellow background for attention */
-    padding: 12px 0;
-    position: relative;
-    white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  background-color: #ffdd55; /* Yellow background for attention */
+  padding: 12px 0;
+  position: relative;
+  white-space: nowrap;
+}
+
+.Notice-content {
+  display: flex;
+  gap: 30px; /* Space between repeated texts */
+  width: 200%;
+  animation: scrollNotice 30s linear infinite;
+}
+
+.Notice-text {
+  color: #110055; /* Dark text for readability */
+  font-size: 18px;
+  font-weight: 500;
+}
+
+@keyframes scrollNotice {
+  from {
+    transform: translateX(10%);
   }
-  
-  .Notice-content {
-    display: flex;
-    gap: 30px; /* Space between repeated texts */
-    width: 200%;
-    animation: scrollNotice 30s linear infinite;
+  to {
+    transform: translateX(-50%);
   }
-  
-  .Notice-text {
-    color: #110055; /* Dark text for readability */
-    font-size: 18px;
-    font-weight: 500;
+}
+
+
+@media (max-width: 750px){
+.Notice-content {
+  animation: scrollNotice 20s linear infinite;
+}
+@keyframes scrollNotice {
+  from {
+    transform: translateX(0%);
   }
-  
-  @keyframes scrollNotice {
-    from {
-      transform: translateX(10%);
-    }
-    to {
-      transform: translateX(-50%);
-    }
+  to {
+    transform: translateX(-100%);
   }
-  
+}
+
+}

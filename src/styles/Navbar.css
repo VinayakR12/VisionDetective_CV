@@ -126,5 +126,8 @@
   .action-button {
     width: 100%;
   }
+  .logo-text{
+    font-size: 19px;
+  }
 }
 

@@ -11,7 +11,8 @@ function App() {
   return (
     <DetectionProvider>
       <Router>
-        <div className="app-container">
+        {/* <div className="app-container"> */}
+        <div>
           <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
