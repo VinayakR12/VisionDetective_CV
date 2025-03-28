@@ -1,17 +1,20 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import { Upload, AlertTriangle, Camera } from "lucide-react"
+import { Upload, AlertTriangle, Camera, FileText } from "lucide-react"
 import { useDetection } from "../context/DetectionContext"
 import "../styles/ThiefInput.css"
 import Footer from "./Footer"
 import Notice from "../components/Notice"
+import report from "../styles/thief_report.pdf"
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const ThiefInput = () => {
   const [selectedFile, setSelectedFile] = useState(null)
   const [error, setError] = useState("")
   const [preview, setPreview] = useState(null)
+  const [showReport, setShowReport] = useState(false) // State for PDF modal
   const navigate = useNavigate()
   const { setDetectionResult, isLoading, setIsLoading, startPageTransition } = useDetection()
 
@@ -58,99 +61,116 @@ const ThiefInput = () => {
     }
   }
 
-  return (<>
-  <Notice/>
-    <div className="input-container">
-      <div className="card">
-        <div className="upload-section">
-          <div className="upload-box">
-            <Camera className="camera-icon" />
-            <h2>Upload Surveillance Image</h2>
-            <p>Select a clear image from your security camera for analysis</p>
+  return (
+    <>
+      <Notice />
+      <div className="input-container">
+        <div className="card">
+          <div className="upload-section">
+            <div className="upload-box">
+              <Camera className="camera-icon" />
+              <h2>Upload Surveillance Image</h2>
+              <p>Select a clear image from your security camera for analysis</p>
 
-            <label className="file-input-label">
-              <input type="file" onChange={handleFileChange} accept="image/*" className="file-input" />
-              <span className="custom-file-button">
-                <Upload className="upload-icon" />
-                Choose Image
-              </span>
-            </label>
+              <label className="file-input-label">
+                <input type="file" onChange={handleFileChange} accept="image/*" className="file-input" />
+                <span className="custom-file-button">
+                  <Upload className="upload-icon" />
+                  Choose Image
+                </span>
+              </label>
 
-            {selectedFile && (
-              <div className="file-info">
-                <p>{selectedFile.name}</p>
-                <p className="file-size">{(selectedFile.size / 1024).toFixed(2)} KB</p>
-              </div>
-            )}
-
-            {preview && (
-              <div className="image-preview">
-                <img src={preview || "/placeholder.svg"} alt="Preview" />
-              </div>
-            )}
-
-            <button onClick={handleUpload} className="detect-button" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <div className="button-spinner"></div>
-                  Processing...
-                </>
-              ) : (
-                "Analyze & Detect"
+              {selectedFile && (
+                <div className="file-info">
+                  <p>{selectedFile.name}</p>
+                  <p className="file-size">{(selectedFile.size / 1024).toFixed(2)} KB</p>
+                </div>
               )}
-            </button>
+
+              {preview && (
+                <div className="image-preview">
+                  <img src={preview || "/placeholder.svg"} alt="Preview" />
+                </div>
+              )}
+
+              <button onClick={handleUpload} className="detect-button" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    Processing...
+                  </>
+                ) : (
+                  "Analyze & Detect"
+                )}
+              </button>
+
+              {/* View Report Button */}
+              <button onClick={() => setShowReport(true)} className="view-report-button">
+                <FileText className="report-icon" />
+                <p id='sample'> View Sample Report</p>
+              </button>
+            </div>
+
+            {error && (
+              <div className="error-message">
+                <AlertTriangle className="error-icon" />
+                <p>{error}</p>
+              </div>
+            )}
           </div>
 
-          {error && (
-            <div className="error-message">
-              <AlertTriangle className="error-icon" />
-              <p>{error}</p>
-            </div>
-          )}
-        </div>
+          <div className="info-section">
+            <h3>How It Works</h3>
+            <ol>
+              <li>Upload a surveillance image</li>
+              <li>Our AI analyzes the image for suspicious activity</li>
+              <li>View detailed detection results</li>
+              <li>Take appropriate security measures</li>
+            </ol>
 
-        <div className="info-section">
-          <h3>How It Works</h3>
-          <ol>
-            <li>Upload a surveillance image</li>
-            <li>Our AI analyzes the image for suspicious activity</li>
-            <li>View detailed detection results</li>
-            <li>Take appropriate security measures</li>
-          </ol>
-
-          <div className="features">
-            <div className="feature">
-              <div className="feature-icon">🔍</div>
-              <div className="feature-text">
-                <h4>Advanced Detection</h4>
-                <p>Identifies potential intruders with high accuracy</p>
+            <div className="features">
+              <div className="feature">
+                <div className="feature-icon">🔍</div>
+                <div className="feature-text">
+                  <h4>Advanced Detection</h4>
+                  <p>Identifies potential intruders with high accuracy</p>
+                </div>
               </div>
-            </div>
 
-            <div className="feature">
-              <div className="feature-icon">⚡</div>
-              <div className="feature-text">
-                <h4>Fast Processing</h4>
-                <p>Results in seconds for quick response</p>
+              <div className="feature">
+                <div className="feature-icon">⚡</div>
+                <div className="feature-text">
+                  <h4>Fast Processing</h4>
+                  <p>Results in seconds for quick response</p>
+                </div>
               </div>
-            </div>
 
-            <div className="feature">
-              <div className="feature-icon">🛡️</div>
-              <div className="feature-text">
-                <h4>Threat Assessment</h4>
-                <p>Detects harmful objects and security risks</p>
+              <div className="feature">
+                <div className="feature-icon">🛡️</div>
+                <div className="feature-text">
+                  <h4>Threat Assessment</h4>
+                  <p>Detects harmful objects and security risks</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-   
-    </div>
-       <Footer/>
-       </>
+
+      {showReport && (
+        <div className="pdf-modal">
+          <div className="pdf-modal-content">
+            <embed src={report} type="application/pdf" className="pdf-embed" />
+            <button onClick={() => setShowReport(false)} className="close-modal">
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      <Footer />
+    </>
   )
 }
 
 export default ThiefInput
-
